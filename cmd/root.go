@@ -17,21 +17,33 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "GO-POSTGRESQL",
-	Short: "Hugo is a very fast static site generator",
-	Long: `A fast and Flexible Static Site Generator built width
-			love by spf13 and friends in Go. Complete Documentation
-			is avaible at http://hugo.spf13.com`,
+	Short: "Tutorial golang in postgresql",
+	Long:  `tutorial golang in postgresql and some plugins`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("go-postgresql is avaible running")
+		fmt.Println("go-postgre is avaible running")
 		Route()
 	},
 }
 
 func init() {
-	cobra.OnInitialize(initViper, conf.Connect)
+	cobra.OnInitialize(splash, InitViper, conf.Connect)
 }
 
-func initViper() {
+// Opened
+func splash() {
+	fmt.Println(`
+	______            ____             __                
+	/ ____/___        / __ \____  _____/ /_____ _________ 
+   / / __/ __ \______/ /_/ / __ \/ ___/ __/ __ / ___/ _ \
+  / /_/ / /_/ /_____/ ____/ /_/ (__  ) /_/ /_/ / /  /  __/
+  \____/\____/     /_/    \____/____/\__/\__, /_/   \___/ 
+										/____/            
+  `)
+	// http://patorjk.com
+}
+
+// InitViper from file toml
+func InitViper() {
 	viper.SetConfigFile("toml")
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
@@ -48,6 +60,8 @@ func initViper() {
 	}
 	fmt.Println("Using Config File: ", viper.ConfigFileUsed())
 }
+
+// Execute from Cobra Firsttime
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		log.Println(err)

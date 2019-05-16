@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	db *sql.DB
+	DB *sql.DB
 )
 
 func Connect() {
@@ -21,14 +21,12 @@ func Connect() {
 	dbname := viper.GetString("configDB.dbname")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	// fmt.Println(psqlInfo)
-	fmt.Println(psqlInfo)
 	result, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		log.Println("seng error database")
+		log.Println("database errors :", err)
 		panic(err)
 	}
 	// defer result.Close()
-	db = result
+	DB = result
 
 }

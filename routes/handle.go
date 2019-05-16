@@ -23,13 +23,13 @@ func (fn HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		errs = append(errs, err.Error())
-		// w.WriteHeader(404)
 		api.Response = errs
 	} else {
 		log.Println(resp)
 		api.Data = resp
 		api.Response = "ok"
 	}
+	w.WriteHeader(http.StatusBadRequest)
 
 	if err := json.NewEncoder(w).Encode(&api); err != nil {
 		log.Println(err)

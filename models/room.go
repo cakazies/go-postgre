@@ -11,29 +11,27 @@ import (
 )
 
 type Rooms struct {
-	Rm_id      int    `json:"rm_id"`
-	Rm_name    string `json:"rm_name"`
-	Rm_place   string `json:"rm_place"`
-	Rm_sumpart int    `json:"rm_sumpart"`
-	Rm_price   int    `json:"rm_price"`
-	Rm_status  int    `json:"rm_status"`
+	RmID      int    `json:"rm_id,omitemp"`
+	RmName    string `json:"rm_name,omitemp"`
+	RmPlace   string `json:"rm_place,omitemp"`
+	RmSumpart int    `json:"rm_sumpart,omitemp"`
+	RmPrice   int    `json:"rm_price,omitemp"`
+	RmStatus  int    `json:"rm_status,omitemp"`
 }
 
 type ManyRooms []Rooms
 
 func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms"
-	data, err := db.Query(sql)
+	data, err := DB.Query(sql)
 	if err != nil {
 		saveError := fmt.Sprintf("Error Query, and ", err)
 		return nil, errors.New(saveError)
 	}
 	var manyRooms ManyRooms
-	// defer db.Close()
-
 	for data.Next() {
 		var perRoom Rooms
-		err = data.Scan(&perRoom.Rm_id, &perRoom.Rm_name, &perRoom.Rm_place, &perRoom.Rm_sumpart, &perRoom.Rm_price, &perRoom.Rm_status)
+		err = data.Scan(&perRoom.RmID, &perRoom.RmName, &perRoom.RmPlace, &perRoom.RmSumpart, &perRoom.RmPrice, &perRoom.RmStatus)
 		if err != nil {
 			saveError := fmt.Sprintf("Error Looping data, and ", err)
 			return nil, errors.New(saveError)
@@ -45,40 +43,36 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 
 func GetRoom(r http.ResponseWriter, h *http.Request) (*Rooms, error) {
 	params := mux.Vars(h)
-	rm_id := params["rm_id"]
+	rmID := params["rm_id"]
 	var room Rooms
 	sql := "SELECT rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms WHERE rm_id = $1"
-	statement, err := db.Prepare(sql)
+	statement, err := DB.Prepare(sql)
 	if err != nil {
 		return nil, err
 	}
-	err = statement.QueryRow(rm_id).Scan(&room.Rm_id, &room.Rm_name, &room.Rm_place, &room.Rm_sumpart, &room.Rm_price, &room.Rm_status)
-
+	err = statement.QueryRow(rmID).Scan(&room.RmID, &room.RmName, &room.RmPlace, &room.RmSumpart, &room.RmPrice, &room.RmStatus)
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
 
 	return &room, nil
 }
 
 func UpdateRooms(r http.ResponseWriter, h *http.Request) (map[string]interface{}, error) {
 	params := mux.Vars(h)
-	rm_id := params["rm_id"]
-	rm_name := h.FormValue("rm_name")
-	rm_place := h.FormValue("rm_place")
-	rm_sumpart := h.FormValue("rm_sumpart")
-	rm_price := h.FormValue("rm_price")
-	updated_at := time.Now().Format("2006-01-02 15:04:05")
+	rmID := params["rm_id"]
+	rmName := h.FormValue("rm_name")
+	rmPlace := h.FormValue("rm_place")
+	rmSumpart := h.FormValue("rm_sumpart")
+	rmPrice := h.FormValue("rm_price")
+	updatedAt := time.Now().Format("2006-01-02 15:04:05")
 	sql := "UPDATE rooms SET rm_name = $1, rm_place = $2, rm_sumpart = $3, rm_price = $4, updated_at = $5 WHERE rm_id = $6 "
-	statement, err := db.Prepare(sql)
+	statement, err := DB.Prepare(sql)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	statement.Exec(rm_name, rm_place, rm_sumpart, rm_price, updated_at, rm_id)
-
-	// defer db.Close()
+	statement.Exec(rmName, rmPlace, rmSumpart, rmPrice, updatedAt, rmID)
 	return nil, nil
 }
 
@@ -97,13 +91,13 @@ func InsertRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}
 		rmID, rmName, rmPlace, rmSumpart, rmPrice, createdAt, updatedAt, deletedAt, rmStatus)
 	fmt.Println("ini adalah cek")
 	fmt.Println(sql)
-	_, errs := db.Query(sql)
+	_, errs := DB.Query(sql)
 	if errs != nil {
 		log.Println("yang error adalah insert", errs)
-		panic(errs)
+		// panic(errs)
 		return nil, errs
 	}
-	// defer db.Close()
+	// defer DB.Close()
 	return nil, nil
 }
 
@@ -113,25 +107,25 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 
 	sql := "DELETE FROM rooms WHERE rm_id = $1"
 
-	statement, err := db.Prepare(sql)
+	statement, err := DB.Prepare(sql)
 
 	if err != nil {
 		saveError := fmt.Sprintf("Error Query Deleted, and ", err)
 		return "", errors.New(saveError)
 	}
 	statement.Exec(rm_id)
-	// defer db.Close()
+	// defer DB.Close()
 	return "Berhasil dihapus", nil
 }
 
 func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	sql := "DELETE FROM rooms"
-	_, err := db.Query(sql)
+	_, err := DB.Query(sql)
 
 	if err != nil {
 		saveError := fmt.Sprintf("Error Query Deleted, and ", err)
 		return "", errors.New(saveError)
 	}
-	// defer db.Close()
+	// defer DB.Close()
 	return "Semua data Rooms Berhasil dihapus", nil
 }

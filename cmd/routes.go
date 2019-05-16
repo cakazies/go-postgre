@@ -15,12 +15,6 @@ func Route() {
 	r := mux.NewRouter()
 
 	api := r.PathPrefix("/api").Subrouter()
-	// api.HandleFunc("/admin", routes.Index).Methods(http.MethodGet)
-	api.HandleFunc("/admin", testHandler).Methods(http.MethodGet)
-
-	// method borrow
-	api.HandleFunc("/getborrow", testHandler).Methods(http.MethodGet)
-	api.HandleFunc("/borrow", routes.BorIndex).Methods(http.MethodGet)
 
 	// method rooms
 	api.Handle("/getrooms", routes.HandlerFunc(routes.GetRooms)).Methods(http.MethodGet)
@@ -39,10 +33,4 @@ func Route() {
 		ReadTimeout:  15 * time.Second,
 	}
 	log.Fatal(srv.ListenAndServe())
-}
-
-func testHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("opi")
-	log.Println("done")
-	return
 }

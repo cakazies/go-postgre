@@ -1,23 +1,18 @@
-### Campaign Microservice
+### GO-POSTGRESQL
 
 How to run
 #### FYI
-the apps have two configuration type, production and development.
-default apps using development configuration (`configs/config.dev.toml`).
-for production set `CAMPAIGN_ENV` as environment with value `PRODUCTION`.
+first => you can configuration config in (`configs/config.dev.toml`) to `configs/config.toml`
+and compare your local configs 
+second => run this `go run migration/migrate.go`
 
-#### Local
+dont forget for `go get`
+- `go get github.com/spf13/viper`
+- `go get github.com/spf13/cobra`
+- `go get github.com/gorilla/mux`
+- `go get github.com/lib/pq`
+
+#### Run Local
 `go run main.go`
 
-or
 
-`env CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o campaign-microservice -v .`
-
-`./campaign-microservice`
-
-#### Docker
-Build to image docker build -t campaign-microservice:v.01 .
-
-Run Images :
-
-`docker run -d --name campaign-microservice -p 8181:8181 campaign-microservice:v.01`
