@@ -1,0 +1,9 @@
+[app]
+    host            = "127.0.0.1:8000"
+
+[configDB]
+    host            = "localhost"
+    port            = 5555
+    user            = "postgres"
+    password        = "password"
+    dbname          = "cobadb"

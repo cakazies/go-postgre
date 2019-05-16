@@ -1,0 +1,38 @@
+package routes
+
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+
+	"github.com/local/go-postgre/api"
+)
+
+type (
+	HandlerFunc func(http.ResponseWriter, *http.Request) (map[string]interface{}, error)
+)
+
+func (fn HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	var api api.Response
+	var errs []string
+
+	r.ParseForm()
+	w.Header().Set("Content-Type", "application/json")
+	resp, err := fn(w, r)
+
+	if err != nil {
+		log.Println(err)
+		errs = append(errs, err.Error())
+		// w.WriteHeader(404)
+		api.Response = errs
+	} else {
+		log.Println(resp)
+		api.Data = resp
+		api.Response = "ok"
+	}
+
+	if err := json.NewEncoder(w).Encode(&api); err != nil {
+		log.Println(err)
+		return
+	}
+}
