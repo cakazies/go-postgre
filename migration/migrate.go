@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/local/go-postgre/cmd"
 	cf "github.com/local/go-postgre/models"
@@ -25,14 +25,12 @@ func main() {
 								CONSTRAINT rooms_pk PRIMARY KEY (rm_id)
 							);`)
 	if err != nil {
-		fmt.Println("something went wrong : ", err)
+		log.Println("something went wrong : ", err)
 	}
-
 	_, err = stmt.Exec()
 	if err != nil {
-		fmt.Println("something went wrong : ", err)
-	} else {
-		fmt.Println("Import Table Room Succesfull")
+		log.Println("something went wrong : ", err)
 	}
+	log.Println("Import Table Room Succesfull")
 	cf.DB.Close()
 }

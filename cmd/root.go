@@ -20,7 +20,7 @@ var rootCmd = &cobra.Command{
 	Short: "Tutorial golang in postgresql",
 	Long:  `tutorial golang in postgresql and some plugins`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("go-postgre is avaible running")
+		log.Println("go-postgre is avaible running")
 		Route()
 	},
 }
@@ -51,14 +51,13 @@ func InitViper() {
 		viper.AddConfigPath("./configs")
 		viper.SetConfigName("config")
 	}
-	//
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("Error Viper config", err)
+		log.Println("Error Viper config", err)
 	}
-	fmt.Println("Using Config File: ", viper.ConfigFileUsed())
+	log.Println("Using Config File: ", viper.ConfigFileUsed())
 }
 
 // Execute from Cobra Firsttime
