@@ -25,7 +25,7 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms"
 	data, err := DB.Query(sql)
 	if err != nil {
-		saveError := fmt.Sprintf("Error Query, and ", err)
+		saveError := fmt.Sprintf("Error Query, and %s", err)
 		return nil, errors.New(saveError)
 	}
 	var manyRooms ManyRooms
@@ -33,7 +33,7 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 		var perRoom Rooms
 		err = data.Scan(&perRoom.RmID, &perRoom.RmName, &perRoom.RmPlace, &perRoom.RmSumpart, &perRoom.RmPrice, &perRoom.RmStatus)
 		if err != nil {
-			saveError := fmt.Sprintf("Error Looping data, and ", err)
+			saveError := fmt.Sprintf("Error Looping data, and %s", err)
 			return nil, errors.New(saveError)
 		}
 		manyRooms = append(manyRooms, perRoom)
@@ -104,7 +104,7 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	sql := "DELETE FROM rooms WHERE rm_id = $1"
 	statement, err := DB.Prepare(sql)
 	if err != nil {
-		saveError := fmt.Sprintf("Error Query Deleted, and ", err)
+		saveError := fmt.Sprintf("Error Query Deleted, and %s", err)
 		return "", errors.New(saveError)
 	}
 	statement.Exec(rm_id)
@@ -116,7 +116,7 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	sql := "DELETE FROM rooms"
 	_, err := DB.Query(sql)
 	if err != nil {
-		saveError := fmt.Sprintf("Error Query Deleted, and ", err)
+		saveError := fmt.Sprintf("Error Query Deleted, and %s", err)
 		return "", errors.New(saveError)
 	}
 	// defer DB.Close()
