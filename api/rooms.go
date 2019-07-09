@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/lib/pq"
 	"github.com/local/go-postgre/models"
 )
 

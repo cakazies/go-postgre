@@ -7,31 +7,34 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	ctr "github.com/local/go-postgre/api"
+	"github.com/local/go-postgre/api"
+	"github.com/local/go-postgre/middleware"
 	"github.com/spf13/viper"
 )
 
 func Route() {
 	r := mux.NewRouter()
 
-	api := r.PathPrefix("/api").Subrouter()
+	routers := r.PathPrefix("/api").Subrouter()
 
+	// cek for middleware
+	routers.Use(middleware.JwtAuthentication)
 	// modul rooms
-	api.Handle("/getrooms", HandlerFunc(ctr.GetRooms)).Methods(http.MethodGet)
-	api.Handle("/insertroom", HandlerFunc(ctr.InsertRooms)).Methods(http.MethodPost)
-	api.Handle("/getroom/{rm_id}", HandlerFunc(ctr.GetRoom)).Methods(http.MethodGet)
-	api.Handle("/updateroom/{rm_id}", HandlerFunc(ctr.UpdateRooms)).Methods(http.MethodPost)
-	api.Handle("/deleteroom/{rm_id}", HandlerFunc(ctr.DeleteRoom)).Methods(http.MethodGet)
-	api.Handle("/deleteallroom", HandlerFunc(ctr.DeleteAllRoom)).Methods(http.MethodGet)
+	routers.Handle("/getrooms", HandlerFunc(api.GetRooms)).Methods(http.MethodGet)
+	routers.Handle("/insertroom", HandlerFunc(api.InsertRooms)).Methods(http.MethodPost)
+	routers.Handle("/getroom/{rm_id}", HandlerFunc(api.GetRoom)).Methods(http.MethodGet)
+	routers.Handle("/updateroom/{rm_id}", HandlerFunc(api.UpdateRooms)).Methods(http.MethodPost)
+	routers.Handle("/deleteroom/{rm_id}", HandlerFunc(api.DeleteRoom)).Methods(http.MethodGet)
+	routers.Handle("/deleteallroom", HandlerFunc(api.DeleteAllRoom)).Methods(http.MethodGet)
 
 	// modul users
-	api.Handle("/user/register", HandlerFunc(ctr.DeleteRoom)).Methods(http.MethodPost)
-	api.Handle("/user/login", HandlerFunc(ctr.DeleteAllRoom)).Methods(http.MethodPost)
+	routers.Handle("/user/register", HandlerFunc(api.Register)).Methods(http.MethodPost)
+	routers.Handle("/user/login", HandlerFunc(api.Login)).Methods(http.MethodPost)
 
 	host := fmt.Sprintf(viper.GetString("app.host"))
 
 	srv := &http.Server{
-		Handler:      r,
+		Handler:      routers,
 		Addr:         host,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
