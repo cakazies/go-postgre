@@ -7,4 +7,6 @@
 
 # Ignore connection local
 vendor/
+
+# configs file 
 configs/config.toml

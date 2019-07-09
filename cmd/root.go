@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 
 	conf "github.com/local/go-postgre/models"
+	"github.com/local/go-postgre/routes"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +22,7 @@ var rootCmd = &cobra.Command{
 	Long:  `tutorial golang in postgresql and some plugins`,
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Println("go-postgre is avaible running")
-		Route()
+		routes.Route()
 	},
 }
 

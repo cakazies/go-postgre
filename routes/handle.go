@@ -21,11 +21,11 @@ func (fn HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	resp, err := fn(w, r)
 
 	if err != nil {
-		log.Println(err)
+		// log.Println(err)
 		errs = append(errs, err.Error())
 		api.Response = errs
 	} else {
-		log.Println(resp)
+		// log.Println(resp)
 		api.Data = resp
 		api.Response = "ok"
 	}
