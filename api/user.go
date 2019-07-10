@@ -2,10 +2,14 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/local/go-postgre/models"
+	"github.com/spf13/viper"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
@@ -16,28 +20,39 @@ func Register(w http.ResponseWriter, r *http.Request) (map[string]interface{}, e
 	}
 
 	response := user.CreateAccount()
-	return response, err
+	return response, nil
 }
 
 func Login(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
-	// data, err := models.GetRooms(w, r)
-	log.Println("sapiiii login")
-	// if err != nil {
-	// 	return nil, err
-	// }
+	user := &models.User{}
+	err := json.NewDecoder(r.Body).Decode(user)
 
+	log.Println(user)
+	if err != nil {
+		fmt.Println(err)
+		return map[string]interface{}{"status": "invalid", "message": "invalid parse data body"}, err
+	}
+	response := user.Login()
+	return response, nil
+}
+
+func Me(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
+	// user := &models.User{}
+	tokenHeader := r.Header.Get("Authorization")
+	headerAuthorizationString := strings.Split(tokenHeader, " ")
+	token := headerAuthorizationString[1]
+	claims := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(viper.GetString("api.secret_key")), nil
+	})
+
+	if err != nil {
+		log.Fatalln("errornya is : ", err)
+	}
+	for key, val := range claims {
+		fmt.Printf("Key: %v, value: %v\n", key, val)
+	}
+	// response := user.Me()
 	return map[string]interface{}{"status": "invalid", "message": "invalid parse data body"}, nil
-	///////////////////////////////////
-
-	// account := &models.Account{}
-
-	// err := json.NewDecoder(r.Body).Decode(account)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	util.Respond(w, util.MetaMsg(false, "Invalid request"))
-	// 	return
-	// }
-
-	// response := account.CreateAccount()
-	// util.Respond(w, response)
+	// return response, nil
 }

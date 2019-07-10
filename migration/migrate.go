@@ -87,7 +87,7 @@ func migrationUser(limit int) {
 						id SERIAL NOT NULL,
 						email character varying(200) COLLATE pg_catalog."default" NOT NULL,
 						username character varying(100) COLLATE pg_catalog."default" NOT NULL,
-						password character varying(100) COLLATE pg_catalog."default" NOT NULL,
+						password character varying(250) COLLATE pg_catalog."default" NOT NULL,
 						created_at timestamp without time zone NOT NULL,
 						updated_at timestamp without time zone NOT NULL,
 						deleted_at timestamp without time zone,
@@ -105,7 +105,7 @@ func migrationUser(limit int) {
 	log.Println(fmt.Sprintf("Import Table %s Succesfull", tableName))
 
 	for i := 1; i <= limit; i++ {
-		email := "email-" + strconv.Itoa(i)
+		email := "email_" + strconv.Itoa(i) + "@gmail.com"
 		username := "username-" + strconv.Itoa(i)
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
 		password := string(hashedPassword)

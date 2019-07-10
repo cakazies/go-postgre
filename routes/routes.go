@@ -30,6 +30,7 @@ func Route() {
 	// modul users
 	routers.Handle("/user/register", HandlerFunc(api.Register)).Methods(http.MethodPost)
 	routers.Handle("/user/login", HandlerFunc(api.Login)).Methods(http.MethodPost)
+	routers.Handle("/user", HandlerFunc(api.Me)).Methods(http.MethodGet)
 
 	host := fmt.Sprintf(viper.GetString("app.host"))
 
