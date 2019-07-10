@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/local/go-postgre/models"
@@ -56,6 +57,15 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		if err != nil {
 			rsp := map[string]interface{}{"status": "invalid", "message": "Malformed Authentication Token Please Login Again;"}
+			w.Header().Add("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(rsp)
+			return
+		}
+
+		// check for time expired
+		diff := tk.TimeExp.Sub(time.Now())
+		if diff < 0 {
+			rsp := map[string]interface{}{"status": "invalid", "message": "Time Expired, please login again;"}
 			w.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(rsp)
 			return

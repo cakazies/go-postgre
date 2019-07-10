@@ -111,33 +111,3 @@ func (registeredUser *User) Login() map[string]interface{} {
 
 	return map[string]interface{}{"status": "valid", "message": "Login is Success", "token": tokenString}
 }
-
-func (registeredUser *User) Me() map[string]interface{} {
-	sql := fmt.Sprintf("SELECT id,email,username,password FROM users WHERE email = '%s'", registeredUser.Email)
-	data, err := DB.Query(sql)
-	if err != nil {
-		log.Println("error query : ", err)
-	}
-	temp := &User{}
-	for data.Next() {
-		err = data.Scan(&temp.ID, &temp.Email, &temp.Username, &temp.Password)
-		if err != nil {
-			saveError := fmt.Sprintf("Error Looping data, and %s", err)
-			log.Println(saveError)
-		}
-	}
-	if temp.Email == "" {
-		return map[string]interface{}{"status": "invalid", "message": "Email Invalid please try again."}
-	}
-
-	err = bcrypt.CompareHashAndPassword([]byte(temp.Password), []byte(registeredUser.Password))
-
-	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return map[string]interface{}{"status": "invalid", "message": "Password Invalid."}
-	}
-	tk := &Token{UserId: uint(temp.ID)}
-	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-	tokenString, _ := token.SignedString([]byte(viper.GetString("api.secret_key")))
-
-	return map[string]interface{}{"status": "valid", "message": "Login is Success", "token": tokenString}
-}

@@ -37,7 +37,6 @@ func Login(w http.ResponseWriter, r *http.Request) (map[string]interface{}, erro
 }
 
 func Me(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
-	// user := &models.User{}
 	tokenHeader := r.Header.Get("Authorization")
 	headerAuthorizationString := strings.Split(tokenHeader, " ")
 	token := headerAuthorizationString[1]
@@ -49,10 +48,5 @@ func Me(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) 
 	if err != nil {
 		log.Fatalln("errornya is : ", err)
 	}
-	for key, val := range claims {
-		fmt.Printf("Key: %v, value: %v\n", key, val)
-	}
-	// response := user.Me()
-	return map[string]interface{}{"status": "invalid", "message": "invalid parse data body"}, nil
-	// return response, nil
+	return claims, nil
 }
