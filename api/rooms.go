@@ -9,18 +9,17 @@ import (
 
 func GetRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
 	data, err := models.GetRooms(w, r)
-	var seveRoom = map[string]interface{}{"data": data}
+	var paramsGet = map[string]interface{}{"data": data}
 	if err != nil {
 		return nil, err
 	}
-	return seveRoom, nil
+	return paramsGet, nil
 }
 
 func GetRoom(r http.ResponseWriter, h *http.Request) (map[string]interface{}, error) {
 	data, err := models.GetRoom(r, h)
 	var getData = map[string]interface{}{"data": data}
 	if err != nil {
-		// log.Println(err)
 		return nil, err
 	}
 	return getData, nil
