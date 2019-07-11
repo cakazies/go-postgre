@@ -23,7 +23,7 @@ func Connect() {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	result, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		log.Println("database errors :", err)
+		log.Fatalln("Check your config file, Database not connect, Error is :", err)
 		panic(err)
 	}
 	// defer result.Close()

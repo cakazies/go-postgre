@@ -2,8 +2,15 @@
     host            = "127.0.0.1:8000"
 
 [configDB]
-    host            = "localhost"
-    port            = 5555
+    host            = "127.0.0.1"
+    port            = 5432
     user            = "postgres"
-    password        = "password"
-    dbname          = "cobadb"
+    password        = "password-local"
+    dbname          = "go-db"
+
+[api]
+    secret_key      = "sapiperahhijau"
+
+[expired]
+    hours           = "0"
+    minutes         = "10"

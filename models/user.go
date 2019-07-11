@@ -22,7 +22,7 @@ type User struct {
 }
 
 func (user *User) Validate() (map[string]interface{}, bool) {
-	if !strings.Contains(user.Email, "@") {
+	if !strings.Contains(user.Email, "@") && !strings.Contains(user.Email, ".") {
 		return map[string]interface{}{"status": "invalid", "message": "Email address format is incorrect"}, false
 	}
 
@@ -33,13 +33,13 @@ func (user *User) Validate() (map[string]interface{}, bool) {
 	sql := fmt.Sprintf("SELECT id,email,username FROM users	WHERE email = '%s'", user.Email)
 	data, err := DB.Query(sql)
 	if err != nil {
-		log.Println("error query : ", err)
+		return map[string]interface{}{"status": "invalid", "message": "Something went wrong, please contact admin or developer."}, false
 	}
 	for data.Next() {
 		err = data.Scan(&temp.ID, &temp.Email, &temp.Username)
 		if err != nil {
 			saveError := fmt.Sprintf("Error Looping data, and %s", err)
-			log.Println(saveError)
+			return map[string]interface{}{"status": "invalid", "message": saveError}, false
 		}
 	}
 	if temp.Email != "" {
