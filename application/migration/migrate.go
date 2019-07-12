@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
+	cf "github.com/local/go-postgre/application/models"
 	"github.com/local/go-postgre/cmd"
-	cf "github.com/local/go-postgre/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

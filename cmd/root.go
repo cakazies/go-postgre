@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	conf "github.com/local/go-postgre/models"
+	conf "github.com/local/go-postgre/application/models"
 	"github.com/local/go-postgre/routes"
 	"github.com/spf13/cobra"
 )

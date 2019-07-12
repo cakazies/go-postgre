@@ -3,10 +3,10 @@
 
 [configDB]
     host            = "127.0.0.1"
-    port            = 5432
+    port            = 32768
     user            = "postgres"
-    password        = "password-local"
-    dbname          = "go-db"
+    password        = "password"
+    dbname          = "go-postgres"
 
 [api]
     secret_key      = "sapiperahhijau"

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/local/go-postgre/api"
+	"github.com/local/go-postgre/application/api"
 )
 
 type (

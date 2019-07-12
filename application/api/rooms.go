@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/local/go-postgre/models"
+	"github.com/local/go-postgre/application/models"
 )
 
 func GetRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {

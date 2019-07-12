@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/local/go-postgre/models"
+	"github.com/local/go-postgre/application/models"
 	"github.com/spf13/viper"
 )
 

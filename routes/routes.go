@@ -7,8 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/local/go-postgre/api"
-	"github.com/local/go-postgre/middleware"
+	"github.com/local/go-postgre/application/api"
 	"github.com/spf13/viper"
 )
 
@@ -18,7 +17,7 @@ func Route() {
 	routers := r.PathPrefix("/api").Subrouter()
 
 	// cek for middleware
-	routers.Use(middleware.JwtAuthentication)
+	// routers.Use(middleware.JwtAuthentication)
 	// modul rooms
 	routers.Handle("/getrooms", HandlerFunc(api.GetRooms)).Methods(http.MethodGet)
 	routers.Handle("/insertroom", HandlerFunc(api.InsertRooms)).Methods(http.MethodPost)

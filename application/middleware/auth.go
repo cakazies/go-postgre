@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/local/go-postgre/models"
+	"github.com/local/go-postgre/application/models"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
