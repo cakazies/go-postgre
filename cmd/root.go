@@ -3,12 +3,12 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/viper"
 
 	conf "github.com/local/go-postgre/application/models"
 	"github.com/local/go-postgre/routes"
+	"github.com/local/go-postgre/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -55,16 +55,12 @@ func InitViper() {
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatalln("Error Viper config", err)
-	}
+	utils.FailError(err, "Error Viper config")
 	log.Println("Using Config File: ", viper.ConfigFileUsed())
 }
 
 // Execute from Cobra Firsttime
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
+	err := rootCmd.Execute()
+	utils.FailError(err, "Error Execute RootCMD")
 }

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/local/go-postgre/application/models"
@@ -44,7 +43,6 @@ func UpdateRooms(r http.ResponseWriter, h *http.Request) (map[string]interface{}
 func DeleteRoom(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
 	massage, err := models.DeleteRoom(w, r)
 	if err != nil {
-		log.Println("error fungsi router ", err)
 		return nil, err
 	}
 	var convert = map[string]interface{}{"resp": massage}
@@ -54,7 +52,6 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (map[string]interface{},
 func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
 	massage, err := models.DeleteAllRoom(w, r)
 	if err != nil {
-		log.Println("error fungsi router ", err)
 		return nil, err
 	}
 	var convert = map[string]interface{}{"resp": massage}

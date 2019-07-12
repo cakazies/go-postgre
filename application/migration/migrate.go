@@ -8,6 +8,7 @@ import (
 
 	cf "github.com/local/go-postgre/application/models"
 	"github.com/local/go-postgre/cmd"
+	"github.com/local/go-postgre/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -26,9 +27,7 @@ func migrationRooms(limit int) {
 	tableName := "rooms"
 	drop := fmt.Sprintf("DROP TABLE IF EXISTS %s;", tableName)
 	_, err := cf.DB.Query(drop)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("Error Query Drop table %s, error is : %s", tableName, err))
-	}
+	utils.FailError(err, fmt.Sprintf("Error Query Drop table %s", tableName))
 	queryCreate := fmt.Sprintf(`
 					CREATE TABLE public.%s
 					(
@@ -44,13 +43,9 @@ func migrationRooms(limit int) {
 						CONSTRAINT %s_pk PRIMARY KEY (rm_id)
 					);`, tableName, tableName)
 	stmt, err := cf.DB.Prepare(queryCreate)
-	if err != nil {
-		log.Fatal("something went wrong : ", err)
-	}
+	utils.FailError(err, fmt.Sprintf("Error Create Table %s ", tableName))
 	_, err = stmt.Exec()
-	if err != nil {
-		log.Fatal(fmt.Sprintf("something went wrong in query create table %s error is : %s", tableName, err))
-	}
+	utils.FailError(err, fmt.Sprintf("Error Create Table %s ", tableName))
 	log.Println(fmt.Sprintf("Import Table %s Succesfull", tableName))
 
 	for i := 1; i <= limit; i++ {
@@ -64,10 +59,8 @@ func migrationRooms(limit int) {
 		rmStatus := "1"
 		sql := fmt.Sprintf("INSERT INTO %s ( rm_name, rm_place, rm_sumpart, rm_price, created_at, updated_at,deleted_at, rm_status) VALUES ('%s', '%s', %s, %s, '%s', '%s', '%s', '%s'); ",
 			tableName, rmName, rmPlace, rmSumpart, rmPrice, createdAt, updatedAt, deletedAt, rmStatus)
-		stmt, errs := cf.DB.Query(sql)
-		if errs != nil {
-			log.Fatal("yang error adalah insert errors id : ", errs)
-		}
+		stmt, err := cf.DB.Query(sql)
+		utils.FailError(err, fmt.Sprintf("Error Insert Data Table %s ", tableName))
 		stmt.Close()
 		time.Sleep(time.Second / 10)
 	}
@@ -78,9 +71,7 @@ func migrationUser(limit int) {
 	tableName := "users"
 	drop := fmt.Sprintf("DROP TABLE IF EXISTS %s;", tableName)
 	_, err := cf.DB.Query(drop)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("Error Query Drop table %s, error is : %s", tableName, err))
-	}
+	utils.FailError(err, fmt.Sprintf("Error Query Drop table %s ", tableName))
 	queryCreate := fmt.Sprintf(`
 					CREATE TABLE public.%s
 					(
@@ -95,13 +86,9 @@ func migrationUser(limit int) {
 						CONSTRAINT %s_pk PRIMARY KEY (id)
 					);`, tableName, tableName)
 	stmt, err := cf.DB.Prepare(queryCreate)
-	if err != nil {
-		log.Fatal("something went wrong : ", err)
-	}
+	utils.FailError(err, fmt.Sprintf("Error Create table %s ", tableName))
 	_, err = stmt.Exec()
-	if err != nil {
-		log.Fatal(fmt.Sprintf("something went wrong in query create table %s error is : %s", tableName, err))
-	}
+	utils.FailError(err, fmt.Sprintf("Error Exec Create table %s ", tableName))
 	log.Println(fmt.Sprintf("Import Table %s Succesfull", tableName))
 
 	for i := 1; i <= limit; i++ {
@@ -115,10 +102,8 @@ func migrationUser(limit int) {
 		status := "1"
 		sql := fmt.Sprintf("INSERT INTO %s ( email, username, password, created_at, updated_at,deleted_at, status) VALUES ( '%s', '%s', '%s', '%s', '%s', '%s', '%s'); ",
 			tableName, email, username, password, createdAt, updatedAt, deletedAt, status)
-		stmt, errs := cf.DB.Query(sql)
-		if errs != nil {
-			log.Fatal("yang error adalah insert", errs)
-		}
+		stmt, err := cf.DB.Query(sql)
+		utils.FailError(err, fmt.Sprintf("Error Insert Data table %s ", tableName))
 		stmt.Close()
 		time.Sleep(time.Second / 10)
 	}

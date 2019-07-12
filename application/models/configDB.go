@@ -3,9 +3,9 @@ package models
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	_ "github.com/lib/pq"
+	"github.com/local/go-postgre/utils"
 	"github.com/spf13/viper"
 )
 
@@ -22,11 +22,7 @@ func Connect() {
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	result, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		log.Fatalln("Check your config file, Database not connect, Error is :", err)
-		panic(err)
-	}
-	log.Println("koneksi sukses lek")
+	utils.FailError(err, "Check your config file, Database not connect")
 	// defer result.Close()
 	DB = result
 
