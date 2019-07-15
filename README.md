@@ -1,6 +1,8 @@
 ### GO-POSTGRESQL
 Golang and Database Postgresql, migrate and Dummy Data
 
+testing REST API 
+
 How to run
 #### FYI
 first => you can configuration config in (`configs/config.dev.toml`) to `configs/config.toml`

@@ -79,7 +79,6 @@ func TestInit(t *testing.T) {
 		RoomID: viper.GetString("testing.room_id"),
 		URL:    viper.GetString("app.host"),
 	}
-
 }
 func TestGetRoom(t *testing.T) {
 	tasks := []testCase{
