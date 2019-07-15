@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/local/go-postgre/application/api"
 )
 
 type (
-	HandlerFunc func(http.ResponseWriter, *http.Request) (map[string]interface{}, error)
+	HandlerFunc func(http.ResponseWriter, *http.Request) (interface{}, error)
 )
 
 func (fn HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -21,12 +22,15 @@ func (fn HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	resp, err := fn(w, r)
 	if err != nil {
 		errs = append(errs, err.Error())
-		api.Response = errs
+		api.Response.Code = strconv.Itoa(http.StatusBadRequest)
+		api.Response.Message = string(err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 	} else {
 		api.Data = resp
-		api.Response = "ok"
+		api.Response.Code = strconv.Itoa(http.StatusOK)
+		api.Response.Message = "Success"
+		w.WriteHeader(http.StatusOK)
 	}
-	w.WriteHeader(http.StatusBadRequest)
 
 	if err := json.NewEncoder(w).Encode(&api); err != nil {
 		log.Println(err)

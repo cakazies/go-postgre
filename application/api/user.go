@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Register(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
+func Register(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
 	if err != nil {
@@ -23,7 +23,7 @@ func Register(w http.ResponseWriter, r *http.Request) (map[string]interface{}, e
 	return response, nil
 }
 
-func Login(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
+func Login(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
 
@@ -36,7 +36,7 @@ func Login(w http.ResponseWriter, r *http.Request) (map[string]interface{}, erro
 	return response, nil
 }
 
-func Me(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
+func Me(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	tokenHeader := r.Header.Get("Authorization")
 
 	headerAuthorizationString := strings.Split(tokenHeader, " ")

@@ -31,27 +31,31 @@ type testCaseParams struct {
 }
 
 type testCase struct {
-	name           string
-	input          string
-	expectedData   string
-	expectedCode   int
-	path           string
-	handler        routes.HandlerFunc
-	query          string
-	checkAccountID bool
+	name         string
+	input        string
+	expectedData string
+	expectedCode int
+	path         string
+	handler      routes.HandlerFunc
+	query        string
+}
+type Response struct {
+	Response Rest                   `json:"response"`
+	Data     map[string]interface{} `json:"data,omitempty"`
 }
 
-type ResponseData struct {
-	Response string  `json:"response"`
-	Data     []Datas `json:"data"`
+type Rest struct {
+	Message string `json:"message,omitempty"`
+	Code    string `json:"code,omitempty"`
 }
-type Datas struct {
-	RmID      string `json:"rm_id"`
-	RmName    string `json:"rm_name"`
-	RmPlace   string `json:"rm_place"`
-	RmSumpart string `json:"rm_sumpart"`
-	RmPrice   string `json:"rm_price"`
-	RmStatus  string `json:"rm_status"`
+
+type DataResponse struct {
+	RmID      string
+	RmName    string
+	RmPlace   string
+	RmSumpart string
+	RmPrice   string
+	RmStatus  string
 }
 
 func initCOnfig() {
@@ -78,57 +82,63 @@ func TestInit(t *testing.T) {
 
 }
 func TestGetRoom(t *testing.T) {
-	TestInit(t)
 	tasks := []testCase{
 		{
-			name:           "Testing with user id",
-			input:          cfg.RoomID,
-			expectedData:   cfg.RoomID,
-			expectedCode:   http.StatusOK,
-			path:           "api/getroom/{id}",
-			handler:        api.GetRoom,
-			query:          "",
-			checkAccountID: false,
+			name:         "Testing with user id",
+			input:        cfg.RoomID,
+			expectedData: cfg.RoomID,
+			expectedCode: http.StatusOK,
+			path:         "api/getroom",
+			handler:      api.GetRoom,
+			query:        "",
 		},
 		{
-			name:           "Testing with random id",
-			input:          "9897",
-			expectedData:   "",
-			expectedCode:   http.StatusOK,
-			path:           "api/getroom/{id}",
-			handler:        api.GetRoom,
-			query:          "",
-			checkAccountID: false,
+			name:         "Testing with random id",
+			input:        "9897",
+			expectedData: "<nil>", // because not value
+			expectedCode: http.StatusBadRequest,
+			path:         "api/getroom",
+			handler:      api.GetRoom,
+			query:        "",
+		},
+		{
+			name:         "Testing with variable",
+			input:        "abc",
+			expectedData: "<nil>", // because not value
+			expectedCode: http.StatusBadRequest,
+			path:         "api/getroom",
+			handler:      api.GetRoom,
+			query:        "",
 		},
 	}
 
 	for _, tc := range tasks {
 		t.Run(tc.name, func(t *testing.T) {
-			url := fmt.Sprintf("http://%s/%s?%s", cfg.URL, tc.input, tc.query)
-			// url := fmt.Sprintf("http://%s/%s/%s", cfg.URL, tc.path, tc.input)
+			// url := fmt.Sprintf("http://%s/%s?%s", cfg.URL, tc.input, tc.query)
+			url := fmt.Sprintf("http://%s/%s/%s", cfg.URL, tc.path, tc.input)
 			resp := getRequest(url, "", tc.handler)
-			log.Println(resp)
 			if resp.Code != tc.expectedCode {
+				// if resp.Code != 99 {
 				t.Errorf("Expected:%d , But Got :%d - message:%v", tc.expectedCode, resp.Code, resp.Body)
 			}
 
 			buf := resp.Body.Bytes()
-			var respData ResponseData
+			var respData Response
 			if err := json.Unmarshal(buf, &respData); err != nil {
 				t.Error("Can not parsing response testing. Error :", err)
 			}
 
-			// for _, v := range respData.Data {
-			// 	if tc.checkAccountID {
-			// 		if tc.expectedData != v.Datas.RmID {
-			// 			t.Errorf("Data account id is invalid: Expected: %s, but got %s", tc.expectedData, v.RmID)
-			// 		}
-			// 	} else {
-			// 		if tc.expectedData != v.RmID {
-			// 			t.Errorf("Data is invalid, Expected:%s, but got %s", tc.expectedData, v.RmID)
-			// 		}
+			getData := fmt.Sprintf("%v", respData.Data["rm_id"])
+			if tc.expectedData != getData {
+				t.Errorf("Data account id is invalid: Expected: %s, but got %s", tc.expectedData, getData)
+			}
+			// for k, v := range respData.Data {
+			// 	if k == "rm_id" {
+			// 		log.Println(k, v)
+			//
 			// 	}
 			// }
+
 		})
 	}
 }
