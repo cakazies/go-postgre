@@ -1,0 +1,238 @@
+{
+	"info": {
+		"_postman_id": "c7e104aa-9ae4-42df-b658-7fd8664099c4",
+		"name": "go-postgre",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "rooms",
+			"item": [
+				{
+					"name": "get all rooms",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barier eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVtYWlsXzFAZ21haWwuY29tIiwidGltZV9leHAiOiIyMDIwLTA3LTA3VDIwOjEyOjE5LjI3Mjg5NzQrMDc6MDAifQ.SNK588WI_4PLSSxJ2XQpunvPeO_b9RI36OnxnE3X9N8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8000/api/getrooms",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"getrooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "insertroom",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "rm_id",
+									"value": "12",
+									"type": "text"
+								},
+								{
+									"key": "rm_name",
+									"value": "name rooms",
+									"type": "text"
+								},
+								{
+									"key": "rm_place",
+									"value": "saudi arab",
+									"type": "text"
+								},
+								{
+									"key": "rm_sumpart",
+									"value": "12",
+									"type": "text"
+								},
+								{
+									"key": "rm_price",
+									"value": "1000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "127.0.0.1:8000/api/insertroom",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"insertroom"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get per Room",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barier eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVtYWlsXzFAZ21haWwuY29tIiwidGltZV9leHAiOiIyMDIwLTA3LTA3VDIwOjEyOjE5LjI3Mjg5NzQrMDc6MDAifQ.SNK588WI_4PLSSxJ2XQpunvPeO_b9RI36OnxnE3X9N8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8000/api/getroom/1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"getroom",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "register users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Barier eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"mas@gmail.com\",\n\t\"username\":\"sapi\",\n\t\"password\" : \"contoh\"\n}\n"
+						},
+						"url": {
+							"raw": "127.0.0.1:8000/api/user/register",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"email_1@gmail.com\",\n\t\"password\" : \"password\"\n}\n"
+						},
+						"url": {
+							"raw": "127.0.0.1:8000/api/user/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barier eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVtYWlsXzFAZ21haWwuY29tIiwidGltZV9leHAiOiIyMDIwLTA3LTA3VDIwOjEyOjE5LjI3Mjg5NzQrMDc6MDAifQ.SNK588WI_4PLSSxJ2XQpunvPeO_b9RI36OnxnE3X9N8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8000/api/user",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/local/go-postgre/application/models"
+	"github.com/spf13/viper"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
@@ -52,7 +53,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		tk := &models.Token{}
 		tokenValue := headerAuthorizationString[1]
 		token, err := jwt.ParseWithClaims(tokenValue, tk, func(token *jwt.Token) (interface{}, error) {
-			return []byte("sapiperahhijau"), nil
+			return []byte(viper.GetString("api.secret_key")), nil
 		})
 
 		if err != nil {

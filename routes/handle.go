@@ -19,7 +19,6 @@ func (fn HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	w.Header().Set("Content-Type", "application/json")
 	resp, err := fn(w, r)
-
 	if err != nil {
 		errs = append(errs, err.Error())
 		api.Response = errs

@@ -38,6 +38,7 @@ func Login(w http.ResponseWriter, r *http.Request) (map[string]interface{}, erro
 
 func Me(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
 	tokenHeader := r.Header.Get("Authorization")
+
 	headerAuthorizationString := strings.Split(tokenHeader, " ")
 	token := headerAuthorizationString[1]
 	claims := jwt.MapClaims{}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -43,7 +44,10 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 
 func GetRoom(r http.ResponseWriter, h *http.Request) (*Rooms, error) {
 	params := mux.Vars(h)
-	rmID := params["rm_id"]
+	rmID, _ := strconv.Atoi(params["rm_id"])
+	if rmID == 0 {
+		rmID = 1
+	}
 	var room Rooms
 	sql := "SELECT rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms WHERE rm_id = $1"
 	statement, err := DB.Prepare(sql)
