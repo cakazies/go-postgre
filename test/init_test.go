@@ -2,8 +2,6 @@ package test
 
 import (
 	"database/sql"
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -28,35 +26,6 @@ var (
 type testCaseParams struct {
 	RoomID string
 	URL    string
-}
-
-type Response struct {
-	Response Rest                   `json:"response"`
-	Data     map[string]interface{} `json:"data,omitempty"`
-}
-
-type Rest struct {
-	Message string `json:"message,omitempty"`
-	Code    string `json:"code,omitempty"`
-}
-
-type testCase struct {
-	name         string
-	input        string
-	expectedData string
-	expectedCode int
-	path         string
-	handler      routes.HandlerFunc
-	query        string
-}
-
-type DataResponse struct {
-	RmID      string
-	RmName    string
-	RmPlace   string
-	RmSumpart string
-	RmPrice   string
-	RmStatus  string
 }
 
 func initCOnfig() {
@@ -99,114 +68,18 @@ func getRequest(url, path string, handler routes.HandlerFunc) *httptest.Response
 	return rr
 }
 
-func TestGetRoom(t *testing.T) {
-	tasks := []testCase{
-		{
-			name:         "Testing with user id",
-			input:        Cfg.RoomID,
-			expectedData: Cfg.RoomID,
-			expectedCode: http.StatusOK,
-			path:         "api/getroom",
-			handler:      api.GetRoom,
-			query:        "",
-		},
-		{
-			name:         "Testing with random id",
-			input:        "9897",
-			expectedData: "<nil>", // because not value
-			expectedCode: http.StatusBadRequest,
-			path:         "api/getroom",
-			handler:      api.GetRoom,
-			query:        "",
-		},
-		{
-			name:         "Testing with variable",
-			input:        "abc",
-			expectedData: "<nil>", // because not value
-			expectedCode: http.StatusBadRequest,
-			path:         "api/getroom",
-			handler:      api.GetRoom,
-			query:        "",
-		},
+func postRequest(url, path string, handler routes.HandlerFunc) *httptest.ResponseRecorder {
+	req, err := http.NewRequest("POST", url, nil)
+	if err != nil {
+		log.Fatalln(err)
 	}
 
-	for _, tc := range tasks {
-		t.Run(tc.name, func(t *testing.T) {
-			// url := fmt.Sprintf("http://%s/%s?%s", cfg.URL, tc.input, tc.query)
-			url := fmt.Sprintf("http://%s/%s/%s", Cfg.URL, tc.path, tc.input)
-			resp := getRequest(url, "", tc.handler)
-			if resp.Code != tc.expectedCode {
-				// if resp.Code != 99 {
-				t.Errorf("Expected:%d , But Got :%d - message:%v", tc.expectedCode, resp.Code, resp.Body)
-			}
+	r := mux.NewRouter()
+	r.Handle(path, routes.HandlerFunc(api.GetRoom))
+	r.Handle(path, routes.HandlerFunc(handler))
+	r.Use(mw.JwtAuthentication)
 
-			buf := resp.Body.Bytes()
-			var respData Response
-			if err := json.Unmarshal(buf, &respData); err != nil {
-				t.Error("Can not parsing response testing. Error :", err)
-			}
-
-			getData := fmt.Sprintf("%v", respData.Data["rm_id"])
-			if tc.expectedData != getData {
-				t.Errorf("Data account id is invalid: Expected: %s, but got %s", tc.expectedData, getData)
-			}
-
-		})
-	}
-}
-
-func TestGetRoom(t *testing.T) {
-	tasks := []testCase{
-		{
-			name:         "Testing with user id",
-			input:        Cfg.RoomID,
-			expectedData: Cfg.RoomID,
-			expectedCode: http.StatusOK,
-			path:         "api/getroom",
-			handler:      api.GetRoom,
-			query:        "",
-		},
-		{
-			name:         "Testing with random id",
-			input:        "9897",
-			expectedData: "<nil>", // because not value
-			expectedCode: http.StatusBadRequest,
-			path:         "api/getroom",
-			handler:      api.GetRoom,
-			query:        "",
-		},
-		{
-			name:         "Testing with variable",
-			input:        "abc",
-			expectedData: "<nil>", // because not value
-			expectedCode: http.StatusBadRequest,
-			path:         "api/getroom",
-			handler:      api.GetRoom,
-			query:        "",
-		},
-	}
-
-	for _, tc := range tasks {
-		t.Run(tc.name, func(t *testing.T) {
-			// url := fmt.Sprintf("http://%s/%s?%s", cfg.URL, tc.input, tc.query)
-			url := fmt.Sprintf("http://%s/%s/%s", Cfg.URL, tc.path, tc.input)
-			resp := getRequest(url, "", tc.handler)
-			if resp.Code != tc.expectedCode {
-				// if resp.Code != 99 {
-				t.Errorf("Expected:%d , But Got :%d - message:%v", tc.expectedCode, resp.Code, resp.Body)
-			}
-
-			buf := resp.Body.Bytes()
-			var respData Response
-			if err := json.Unmarshal(buf, &respData); err != nil {
-				t.Error("Can not parsing response testing. Error :", err)
-			}
-
-			getData := fmt.Sprintf("%v", respData.Data["rm_id"])
-			if tc.expectedData != getData {
-				t.Errorf("Data account id is invalid: Expected: %s, but got %s", tc.expectedData, getData)
-			}
-
-		})
-	}
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+	return rr
 }

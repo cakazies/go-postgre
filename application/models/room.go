@@ -109,8 +109,19 @@ func InsertRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}
 
 func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	params := mux.Vars(r)
-	rm_id := params["rm_id"]
+	rm_id, _ := strconv.Atoi(params["rm_id"])
 
+	url := strings.Split((r.URL.String()), "/")
+	if rm_id == 0 {
+		rm_id, _ = strconv.Atoi(url[5])
+	}
+	if rm_id < 1 {
+		return "", errors.New("ID Only Positive and Integer")
+	}
+	err := CekExistData(rm_id)
+	if err != nil {
+		return "", err
+	}
 	sql := "DELETE FROM rooms WHERE rm_id = $1"
 	statement, err := DB.Prepare(sql)
 	if err != nil {
@@ -118,7 +129,7 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 		return "", errors.New(saveError)
 	}
 	statement.Exec(rm_id)
-	// defer DB.Close()
+	defer statement.Close()
 	return "Berhasil dihapus", nil
 }
 
@@ -131,4 +142,19 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	}
 	// defer DB.Close()
 	return "Semua data Rooms Berhasil dihapus", nil
+}
+
+func CekExistData(id int) error {
+	rm_id := ""
+	sql := "SELECT rm_id FROM rooms WHERE rm_id = $1"
+	statement, err := DB.Prepare(sql)
+	defer statement.Close()
+	if err != nil {
+		return err
+	}
+	err = statement.QueryRow(id).Scan(&rm_id)
+	if err != nil {
+		return errors.New("ID Doesn't Exist")
+	}
+	return nil
 }

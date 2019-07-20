@@ -18,12 +18,12 @@ func main() {
 	limit = 10
 	cf.Connect()
 	// call function migrationrooms
-	migrationRooms(limit)
-	migrationUser(limit)
+	MigrationRooms(limit)
+	MigrationUser(limit)
 	cf.DB.Close()
 }
 
-func migrationRooms(limit int) {
+func MigrationRooms(limit int) {
 	tableName := "rooms"
 	drop := fmt.Sprintf("DROP TABLE IF EXISTS %s;", tableName)
 	_, err := cf.DB.Query(drop)
@@ -67,7 +67,7 @@ func migrationRooms(limit int) {
 	log.Println(fmt.Sprintf("Insert Data Dummy table %s successfull", tableName))
 }
 
-func migrationUser(limit int) {
+func MigrationUser(limit int) {
 	tableName := "users"
 	drop := fmt.Sprintf("DROP TABLE IF EXISTS %s;", tableName)
 	_, err := cf.DB.Query(drop)

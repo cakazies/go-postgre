@@ -45,8 +45,8 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	// var convert = map[string]interface{}{"resp": massage}
-	return message, nil
+	var convert = map[string]interface{}{"message": message}
+	return convert, nil
 }
 
 func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (interface{}, error) {
@@ -54,6 +54,6 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	// var convert = map[string]interface{}{"resp": massage}
-	return message, nil
+	var convert = map[string]interface{}{"message": message}
+	return convert, nil
 }
