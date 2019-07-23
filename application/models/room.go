@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// struct rooms
 type Rooms struct {
 	RmID      int    `json:"rm_id,omitemp"`
 	RmName    string `json:"rm_name,omitemp"`
@@ -21,15 +22,23 @@ type Rooms struct {
 	RmStatus  int    `json:"rm_status,omitemp"`
 }
 
+// strtuck for many room array
 type ManyRooms []Rooms
 
+// GetRooms function for get all data from table
 func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
-	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms"
+	qulimit := ""
+	quShort := ""
+	qulimit = LimitOffset(r.URL.Query().Get("limit"), r.URL.Query().Get("offset"))
+	quShort = ShortBy(r.URL.Query().Get("sort_by"))
+
+	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms " + quShort + qulimit
 	data, err := DB.Query(sql)
 	if err != nil {
 		saveError := fmt.Sprintf("Error Query, and %s", err)
 		return nil, errors.New(saveError)
 	}
+
 	var manyRooms ManyRooms
 	for data.Next() {
 		var perRoom Rooms
@@ -43,11 +52,12 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 	return manyRooms, nil
 }
 
-func GetRoom(r http.ResponseWriter, h *http.Request) (*Rooms, error) {
-	params := mux.Vars(h)
+// GetRoom functionfor get perRooms
+func GetRoom(w http.ResponseWriter, r *http.Request) (*Rooms, error) {
+	params := mux.Vars(r)
 	rmID, _ := strconv.Atoi(params["rm_id"])
 
-	url := strings.Split((h.URL.String()), "/")
+	url := strings.Split((r.URL.String()), "/")
 	if rmID == 0 {
 		rmID, _ = strconv.Atoi(url[5])
 	}
@@ -55,7 +65,13 @@ func GetRoom(r http.ResponseWriter, h *http.Request) (*Rooms, error) {
 		return nil, errors.New("ID Only Positive and Integer")
 	}
 	var room Rooms
-	sql := "SELECT rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms WHERE rm_id = $1"
+
+	qulimit := ""
+	quShort := ""
+	qulimit = LimitOffset(r.URL.Query().Get("limit"), r.URL.Query().Get("offset"))
+	quShort = ShortBy(r.URL.Query().Get("sort_by"))
+
+	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms WHERE rm_id = $1 " + quShort + qulimit
 	statement, err := DB.Prepare(sql)
 	if err != nil {
 		return nil, err
@@ -67,6 +83,7 @@ func GetRoom(r http.ResponseWriter, h *http.Request) (*Rooms, error) {
 	return &room, nil
 }
 
+// UpdateRooms function for update data rooms
 func UpdateRooms(r http.ResponseWriter, h *http.Request) (map[string]interface{}, error) {
 	params := mux.Vars(h)
 	rmID := params["rm_id"]
@@ -85,6 +102,7 @@ func UpdateRooms(r http.ResponseWriter, h *http.Request) (map[string]interface{}
 	return nil, nil
 }
 
+// InsertRooms function for insert data in table Rooms
 func InsertRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
 	rmID := r.FormValue("rm_id")
 	rmName := r.FormValue("rm_name")
@@ -107,6 +125,7 @@ func InsertRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}
 	return nil, nil
 }
 
+// DeleteRoom function for delete one data in table rooms
 func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	params := mux.Vars(r)
 	rm_id, _ := strconv.Atoi(params["rm_id"])
@@ -133,6 +152,7 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	return "Berhasil dihapus", nil
 }
 
+// DeleteAllRoom function for Delete all data in table rooms
 func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	sql := "DELETE FROM rooms"
 	_, err := DB.Query(sql)
@@ -144,6 +164,7 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	return "Semua data Rooms Berhasil dihapus", nil
 }
 
+// CekExistData function for validate data exist
 func CekExistData(id int) error {
 	rm_id := ""
 	sql := "SELECT rm_id FROM rooms WHERE rm_id = $1"
