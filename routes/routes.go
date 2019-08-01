@@ -27,6 +27,9 @@ func Route() {
 	routers.Handle("/deleteroom/{rm_id}", HandlerFunc(api.DeleteRoom)).Methods(http.MethodGet)
 	routers.Handle("/deleteallroom", HandlerFunc(api.DeleteAllRoom)).Methods(http.MethodGet)
 
+	// module borrow
+	routers.Handle("/borrow", HandlerFunc(api.GetBorrows)).Methods(http.MethodGet)
+
 	// modul users
 	routers.Handle("/user/register", HandlerFunc(api.Register)).Methods(http.MethodPost)
 	routers.Handle("/user/login", HandlerFunc(api.Login)).Methods(http.MethodPost)
