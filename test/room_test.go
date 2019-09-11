@@ -26,7 +26,6 @@ type Response struct {
 	Response Rest                   `json:"response"`
 	Data     map[string]interface{} `json:"data,omitempty"`
 }
-
 type Rest struct {
 	Message string `json:"message,omitempty"`
 	Code    string `json:"code,omitempty"`
