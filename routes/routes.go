@@ -6,12 +6,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cakazies/go-postgre/application/api"
+	"github.com/cakazies/go-postgre/application/middleware"
 	"github.com/gorilla/mux"
-	"github.com/local/go-postgre/application/api"
-	"github.com/local/go-postgre/application/middleware"
 	"github.com/spf13/viper"
 )
 
+// Route function for routing
 func Route() {
 	r := mux.NewRouter()
 

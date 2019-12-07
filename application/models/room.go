@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// struct rooms
+// Rooms struct for table ROoms
 type Rooms struct {
 	RmID      int    `json:"rm_id,omitemp"`
 	RmName    string `json:"rm_name,omitemp"`
@@ -22,7 +22,7 @@ type Rooms struct {
 	RmStatus  int    `json:"rm_status,omitemp"`
 }
 
-// strtuck for many room array
+// ManyRooms strtuck for many room array
 type ManyRooms []Rooms
 
 // GetRooms function for get all data from table
@@ -54,6 +54,8 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 
 // GetRoom functionfor get perRooms
 func GetRoom(w http.ResponseWriter, r *http.Request) (*Rooms, error) {
+	var room Rooms
+
 	params := mux.Vars(r)
 	rmID, _ := strconv.Atoi(params["rm_id"])
 
@@ -64,15 +66,15 @@ func GetRoom(w http.ResponseWriter, r *http.Request) (*Rooms, error) {
 	if rmID < 1 {
 		return nil, errors.New("ID Only Positive and Integer")
 	}
-	var room Rooms
 
 	qulimit := ""
 	quShort := ""
 	qulimit = LimitOffset(r.URL.Query().Get("limit"), r.URL.Query().Get("offset"))
 	quShort = ShortBy(r.URL.Query().Get("sort_by"))
-
+	DB.Ping()
 	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms WHERE rm_id = $1 " + quShort + qulimit
 	statement, err := DB.Prepare(sql)
+	fmt.Println(err)
 	if err != nil {
 		return nil, err
 	}
@@ -128,16 +130,16 @@ func InsertRooms(w http.ResponseWriter, r *http.Request) (map[string]interface{}
 // DeleteRoom function for delete one data in table rooms
 func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 	params := mux.Vars(r)
-	rm_id, _ := strconv.Atoi(params["rm_id"])
+	rmID, _ := strconv.Atoi(params["rm_id"])
 
 	url := strings.Split((r.URL.String()), "/")
-	if rm_id == 0 {
-		rm_id, _ = strconv.Atoi(url[5])
+	if rmID == 0 {
+		rmID, _ = strconv.Atoi(url[5])
 	}
-	if rm_id < 1 {
+	if rmID < 1 {
 		return "", errors.New("ID Only Positive and Integer")
 	}
-	err := CekExistData(rm_id)
+	err := CekExistData(rmID)
 	if err != nil {
 		return "", err
 	}
@@ -147,7 +149,7 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 		saveError := fmt.Sprintf("Error Query Deleted, and %s", err)
 		return "", errors.New(saveError)
 	}
-	statement.Exec(rm_id)
+	statement.Exec(rmID)
 	defer statement.Close()
 	return "Berhasil dihapus", nil
 }
@@ -166,14 +168,14 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (string, error) {
 
 // CekExistData function for validate data exist
 func CekExistData(id int) error {
-	rm_id := ""
+	rmID := ""
 	sql := "SELECT rm_id FROM rooms WHERE rm_id = $1"
 	statement, err := DB.Prepare(sql)
 	defer statement.Close()
 	if err != nil {
 		return err
 	}
-	err = statement.QueryRow(id).Scan(&rm_id)
+	err = statement.QueryRow(id).Scan(&rmID)
 	if err != nil {
 		return errors.New("ID Doesn't Exist")
 	}

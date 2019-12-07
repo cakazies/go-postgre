@@ -7,13 +7,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/cakazies/go-postgre/application/api"
 	"github.com/gorilla/mux"
-	"github.com/local/go-postgre/application/api"
 
-	mw "github.com/local/go-postgre/application/middleware"
-	conf "github.com/local/go-postgre/application/models"
-	"github.com/local/go-postgre/routes"
-	"github.com/local/go-postgre/utils"
+	mw "github.com/cakazies/go-postgre/application/middleware"
+	conf "github.com/cakazies/go-postgre/application/models"
+	"github.com/cakazies/go-postgre/routes"
+	"github.com/cakazies/go-postgre/utils"
 	"github.com/spf13/viper"
 )
 
@@ -52,7 +52,6 @@ func TestInit(t *testing.T) {
 }
 
 func getRequest(url, path string, handler routes.HandlerFunc) *httptest.ResponseRecorder {
-	// req, err := http.NewRequest("GET", "http://127.0.0.1:8000/api/getroom/1", nil)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Fatalln(err)

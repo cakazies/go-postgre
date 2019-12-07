@@ -7,11 +7,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/cakazies/go-postgre/application/models"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/local/go-postgre/application/models"
 	"github.com/spf13/viper"
 )
 
+// Register function for register users
 func Register(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
@@ -23,6 +24,7 @@ func Register(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	return response, nil
 }
 
+// Login function for login
 func Login(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
@@ -36,6 +38,7 @@ func Login(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	return response, nil
 }
 
+// Me function for get detail in token
 func Me(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	tokenHeader := r.Header.Get("Authorization")
 

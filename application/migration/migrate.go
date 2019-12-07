@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	cf "github.com/local/go-postgre/application/models"
-	"github.com/local/go-postgre/cmd"
-	"github.com/local/go-postgre/utils"
+	cf "github.com/cakazies/go-postgre/application/models"
+	"github.com/cakazies/go-postgre/cmd"
+	"github.com/cakazies/go-postgre/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -25,6 +25,7 @@ func main() {
 	cf.DB.Close()
 }
 
+// MigrationRooms function for migrations table rooms
 func MigrationRooms(limit int) {
 	tableName := "rooms"
 	drop := fmt.Sprintf("DROP TABLE IF EXISTS %s;", tableName)

@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/viper"
 
-	conf "github.com/local/go-postgre/application/models"
-	"github.com/local/go-postgre/routes"
-	"github.com/local/go-postgre/utils"
+	conf "github.com/cakazies/go-postgre/application/models"
+	"github.com/cakazies/go-postgre/routes"
+	"github.com/cakazies/go-postgre/utils"
 	"github.com/spf13/cobra"
 )
 

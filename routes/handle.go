@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/local/go-postgre/application/api"
+	"github.com/cakazies/go-postgre/application/api"
 )
 
 type (
+	// HandlerFunc ...
 	HandlerFunc func(http.ResponseWriter, *http.Request) (interface{}, error)
 )
 

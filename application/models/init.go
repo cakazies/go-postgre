@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// LimitOffset function for get limit and offset in request API
 func LimitOffset(limit string, offset string) string {
 	limits, _ := strconv.Atoi(limit)
 	offsets, _ := strconv.Atoi(offset)
@@ -23,6 +24,7 @@ func LimitOffset(limit string, offset string) string {
 	return ""
 }
 
+// ShortBy function for shorting data
 func ShortBy(query string) string {
 	result := ""
 	if query == "" {
