@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/local/go-postgre/cmd"
+	"github.com/cakazies/go-postgre/cmd"
 )
 
 func main() {

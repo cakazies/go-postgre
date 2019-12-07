@@ -7,11 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cakazies/go-postgre/application/models"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/local/go-postgre/application/models"
 	"github.com/spf13/viper"
 )
 
+// JwtAuthentication for JWT
 var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -80,7 +81,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		// fmt.Sprintf("User Id is %s", tk.UserId)
-		ctx := context.WithValue(r.Context(), "user", tk.UserId)
+		ctx := context.WithValue(r.Context(), "user", tk.UserID)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 

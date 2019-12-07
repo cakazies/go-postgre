@@ -13,6 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// User struct for get users struct
 type User struct {
 	ID       int    `json:"id,omitemp"`
 	Email    string `json:"email,omitemp"`
@@ -21,6 +22,7 @@ type User struct {
 	gorm.Model
 }
 
+// Validate function for validate
 func (user *User) Validate() (map[string]interface{}, bool) {
 	if !strings.Contains(user.Email, "@") && !strings.Contains(user.Email, ".") {
 		return map[string]interface{}{"status": "invalid", "message": "Email address format is incorrect"}, false
@@ -49,6 +51,7 @@ func (user *User) Validate() (map[string]interface{}, bool) {
 	return map[string]interface{}{"status": "Valid", "message": "Requirement passed"}, true
 }
 
+// CreateAccount function for create account for login
 func (user *User) CreateAccount() map[string]interface{} {
 	if rsp, status := user.Validate(); !status {
 		return rsp
@@ -70,15 +73,16 @@ func (user *User) CreateAccount() map[string]interface{} {
 	timein := time.Now().Local().Add(time.Hour*time.Duration(Hours) +
 		time.Minute*time.Duration(Mins))
 
-	tk := &Token{UserId: uint(idUser), Email: user.Email, TimeExp: timein}
+	tk := &Token{UserID: uint(idUser), Email: user.Email, TimeExp: timein}
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte(viper.GetString("api.secret_key")))
 
 	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "token": tokenString}
 }
 
-func (registeredUser *User) Login() map[string]interface{} {
-	sql := fmt.Sprintf("SELECT id,email,username,password FROM users WHERE email = '%s'", registeredUser.Email)
+// Login function for checking login valid or not
+func (user *User) Login() map[string]interface{} {
+	sql := fmt.Sprintf("SELECT id,email,username,password FROM users WHERE email = '%s'", user.Email)
 	data, err := DB.Query(sql)
 	if err != nil {
 		log.Println("error query : ", err)
@@ -95,7 +99,7 @@ func (registeredUser *User) Login() map[string]interface{} {
 		return map[string]interface{}{"status": "invalid", "message": "Email Invalid please try again."}
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(temp.Password), []byte(registeredUser.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(temp.Password), []byte(user.Password))
 
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return map[string]interface{}{"status": "invalid", "message": "Password Invalid."}
@@ -105,7 +109,7 @@ func (registeredUser *User) Login() map[string]interface{} {
 	timein := time.Now().Local().Add(time.Hour*time.Duration(Hours) +
 		time.Minute*time.Duration(Mins))
 
-	tk := &Token{UserId: uint(temp.ID), Email: temp.Email, TimeExp: timein}
+	tk := &Token{UserID: uint(temp.ID), Email: temp.Email, TimeExp: timein}
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte(viper.GetString("api.secret_key")))
 

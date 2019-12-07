@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/local/go-postgre/application/api"
-	"github.com/local/go-postgre/routes"
+	"github.com/cakazies/go-postgre/application/api"
+	"github.com/cakazies/go-postgre/routes"
 )
 
 type testCase struct {
