@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/cakazies/go-postgre/utils"
 	// library for conenct postgresql
@@ -24,11 +25,15 @@ func Connect() {
 	dbname := viper.GetString("configDB.dbname")
 
 	// psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=verify-full", user, password, host, port, dbname)
-
+	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbname)
 	result, err := sql.Open("postgres", psqlInfo)
 	utils.FailError(err, "Check your config file, Database not connect")
 	// defer result.Close()
-	result.Ping()
+	err = result.Ping()
+	if err != nil {
+		log.Println("Error DB Ping : ", err)
+		return
+	}
+
 	DB = result
 }
