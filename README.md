@@ -13,7 +13,9 @@ you can import collection in
 
 ## How to run
 
-- you can configuration config (**Database**) in (`env.dev`) to `.env` and compare your local configs
+- you can configuration config (**Database**) in folder `configs/config.dev.toml` to `configs/config.toml` and compare your local configs, database, host and depends
+
+you can install dependencies using `go mod` or one by one,
 
 - install dependencies go get
   - `go get github.com/spf13/viper`
@@ -24,3 +26,4 @@ you can import collection in
 ## Run Local
 
 `go run main.go`
+
