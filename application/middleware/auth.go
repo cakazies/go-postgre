@@ -44,7 +44,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		barier := headerAuthorizationString[0]
-		if barier != "Barier" {
+		if barier != "Bearer" {
 			rsp := map[string]interface{}{"status": "invalid", "message": "Token is not Barier ;"}
 			w.Header().Add("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(rsp)

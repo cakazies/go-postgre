@@ -16,6 +16,8 @@
     minutes         = "10"
 
 [testing]
-    jwt           = "Barier eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVtYWlsXzFAZ21haWwuY29tIiwidGltZV9leHAiOiIyMDIwLTA3LTA3VDIwOjEyOjE5LjI3Mjg5NzQrMDc6MDAifQ.SNK588WI_4PLSSxJ2XQpunvPeO_b9RI36OnxnE3X9N8"
-    room_id       = 1
+    jwt             = "Barier eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImVtYWlsXzFAZ21haWwuY29tIiwidGltZV9leHAiOiIyMDIwLTA3LTA3VDIwOjEyOjE5LjI3Mjg5NzQrMDc6MDAifQ.SNK588WI_4PLSSxJ2XQpunvPeO_b9RI36OnxnE3X9N8"
+    room_id         = 1
     
+[sentry]
+    dsn             = "https://18c1f9f0d9c14b17abf9526f2aa3fbb6@sentry.io/1446148"

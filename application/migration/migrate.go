@@ -13,10 +13,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	limit = 10
+)
+
 func main() {
 	cmd.InitViper()
-	var limit int
-	limit = 10
 	cf.Connect()
 	// call function migrationrooms
 	MigrationRooms(limit)
