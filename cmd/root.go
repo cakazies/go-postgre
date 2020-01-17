@@ -56,7 +56,6 @@ func InitViper() {
 
 	err := viper.ReadInConfig()
 	utils.FailError(err, "Error Viper config")
-	// log.Println("Using Config File: ", viper.ConfigFileUsed())
 }
 
 // Execute from Cobra Firsttime

@@ -10,3 +10,6 @@ vendor/
 
 # configs file 
 configs/config.toml
+
+# folder idea for goland
+.idea

@@ -5,7 +5,7 @@ Golang and Database Postgresql, migrate and Dummy Data
 ## Collection Postman
 
 you can import collection in
-> `test/postman/go-postgre.postman_collection.json`
+> `utils/postman/go-postgre.postman_collection.json`
 
 ## Run Migration with
 
