@@ -25,11 +25,8 @@ func Route() {
 	routers.Handle("/insertroom", HandlerFunc(api.InsertRooms)).Methods(http.MethodPost)
 	routers.Handle("/getroom/{rm_id}", HandlerFunc(api.GetRoom)).Methods(http.MethodGet)
 	routers.Handle("/updateroom/{rm_id}", HandlerFunc(api.UpdateRooms)).Methods(http.MethodPost)
-	routers.Handle("/deleteroom/{rm_id}", HandlerFunc(api.DeleteRoom)).Methods(http.MethodGet)
-	routers.Handle("/deleteallroom", HandlerFunc(api.DeleteAllRoom)).Methods(http.MethodGet)
-
-	// module borrow
-	routers.Handle("/borrow", HandlerFunc(api.GetBorrows)).Methods(http.MethodGet)
+	routers.Handle("/deleteroom/{rm_id}", HandlerFunc(api.DeleteRoom)).Methods(http.MethodDelete)
+	routers.Handle("/deleteallroom", HandlerFunc(api.DeleteAllRoom)).Methods(http.MethodDelete)
 
 	// modul users
 	routers.Handle("/user/register", HandlerFunc(api.Register)).Methods(http.MethodPost)

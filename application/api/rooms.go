@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/cakazies/go-postgre/application/models"
@@ -27,7 +28,15 @@ func GetRoom(r http.ResponseWriter, h *http.Request) (interface{}, error) {
 
 // InsertRooms function for insert in table room
 func InsertRooms(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	_, err := models.InsertRooms(w, r)
+	user := &models.Rooms{}
+	err := json.NewDecoder(r.Body).Decode(user)
+	if err != nil {
+		SentryInit(err)
+		return map[string]interface{}{"status": "invalid", "message": "invalid parse data body"}, err
+	}
+
+	_, err = models.InsertRooms(user)
+
 	if err != nil {
 		SentryInit(err)
 		return nil, err
