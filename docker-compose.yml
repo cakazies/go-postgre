@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  apps:
+    container_name: go-postgresql 
+    build: .
+    labels:
+      team: cakazies
+      version: 1.0.0
+      environment: development
+    depends_on:
+      - db
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./.env:/.env
+  db:
+    image: postgresql
+    restart: always
+    container_name: go-postgresql_postgres
+    environment:
+      MYSQL_DATABASE: "project_service"
+      MYSQL_USER: "root"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"

@@ -6,7 +6,6 @@ import (
 
 	"github.com/spf13/viper"
 
-	conf "github.com/cakazies/go-postgre/application/models"
 	"github.com/cakazies/go-postgre/routes"
 	"github.com/cakazies/go-postgre/utils"
 	"github.com/spf13/cobra"
@@ -27,7 +26,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	cobra.OnInitialize(splash, InitViper, conf.Connect)
+	cobra.OnInitialize(splash, InitViper)
 }
 
 // Opened
@@ -56,7 +55,6 @@ func InitViper() {
 
 	err := viper.ReadInConfig()
 	utils.FailError(err, "Error Viper config")
-	// log.Println("Using Config File: ", viper.ConfigFileUsed())
 }
 
 // Execute from Cobra Firsttime
