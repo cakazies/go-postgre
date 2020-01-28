@@ -35,7 +35,7 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (ManyRooms, error) {
 	sql := "select rm_id,rm_name,rm_place,rm_sumpart,rm_price, rm_status FROM rooms " + quShort + qulimit
 	data, err := DB.Query(sql)
 	if err != nil {
-		saveError := fmt.Sprintf("Error Query, and %s", err)
+		saveError := fmt.Sprintf("Error Query : %s", err)
 		return nil, errors.New(saveError)
 	}
 

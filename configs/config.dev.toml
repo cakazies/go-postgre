@@ -1,5 +1,5 @@
 [app]
-    host            = "127.0.0.1:8000"
+    host            = "127.0.0.1:8002"
 
 [configDB]
     host            = "127.0.0.1"
@@ -20,4 +20,4 @@
     room_id         = 1
     
 [sentry]
-    dsn             = "https://18c1f9f0d9c14b17abf9526f2aa3fbb6@sentry.io/1446148"
+    dsn             = ""

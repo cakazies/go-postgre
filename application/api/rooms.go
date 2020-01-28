@@ -19,6 +19,7 @@ func GetRooms(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 func GetRoom(r http.ResponseWriter, h *http.Request) (interface{}, error) {
 	data, err := models.GetRoom(r, h)
 	if err != nil {
+		SentryInit(err)
 		return nil, err
 	}
 	return data, nil
@@ -28,6 +29,7 @@ func GetRoom(r http.ResponseWriter, h *http.Request) (interface{}, error) {
 func InsertRooms(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	_, err := models.InsertRooms(w, r)
 	if err != nil {
+		SentryInit(err)
 		return nil, err
 	}
 	return nil, nil
@@ -37,6 +39,7 @@ func InsertRooms(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 func UpdateRooms(r http.ResponseWriter, h *http.Request) (interface{}, error) {
 	_, err := models.UpdateRooms(r, h)
 	if err != nil {
+		SentryInit(err)
 		return nil, err
 	}
 	return nil, nil
@@ -46,6 +49,7 @@ func UpdateRooms(r http.ResponseWriter, h *http.Request) (interface{}, error) {
 func DeleteRoom(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	message, err := models.DeleteRoom(w, r)
 	if err != nil {
+		SentryInit(err)
 		return nil, err
 	}
 	var convert = map[string]interface{}{"message": message}
@@ -56,6 +60,7 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 func DeleteAllRoom(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	message, err := models.DeleteAllRoom(w, r)
 	if err != nil {
+		SentryInit(err)
 		return nil, err
 	}
 	var convert = map[string]interface{}{"message": message}

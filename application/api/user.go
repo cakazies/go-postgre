@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -17,6 +16,7 @@ func Register(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
 	if err != nil {
+		SentryInit(err)
 		return map[string]interface{}{"status": "invalid", "message": "invalid parse data body"}, err
 	}
 
@@ -29,9 +29,8 @@ func Login(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
 
-	log.Println(user)
 	if err != nil {
-		fmt.Println(err)
+		SentryInit(err)
 		return map[string]interface{}{"status": "invalid", "message": "invalid parse data body"}, err
 	}
 	response := user.Login()
@@ -50,6 +49,7 @@ func Me(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	})
 
 	if err != nil {
+		SentryInit(err)
 		log.Fatalln("errornya is : ", err)
 	}
 	return claims, nil
