@@ -3,7 +3,7 @@
 
 [configDB]
     host            = "127.0.0.1"
-    port            = 32768
+    port            = 5432
     user            = "postgres"
     password        = "password"
     dbname          = "go-postgres"

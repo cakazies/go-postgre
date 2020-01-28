@@ -25,6 +25,7 @@ func Connect() error {
 
 	// psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbname)
+	// log.Println(psqlInfo)
 	result, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		// utils.FailError(err, "Check your config file, Database not connect")

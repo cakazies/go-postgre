@@ -4,15 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/spf13/viper"
-
 	"github.com/cakazies/go-postgre/routes"
 	"github.com/cakazies/go-postgre/utils"
 	"github.com/spf13/cobra"
-)
-
-var (
-	cfgFile string
 )
 
 var rootCmd = &cobra.Command{
@@ -26,7 +20,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	cobra.OnInitialize(splash, InitViper)
+	cobra.OnInitialize(splash)
 }
 
 // Opened
@@ -40,21 +34,6 @@ func splash() {
 										/____/            
   `)
 	// http://patorjk.com
-}
-
-// InitViper from file toml
-func InitViper() {
-	viper.SetConfigFile("toml")
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
-	} else {
-		viper.AddConfigPath("./configs")
-		viper.SetConfigName("config")
-	}
-	viper.AutomaticEnv()
-
-	err := viper.ReadInConfig()
-	utils.FailError(err, "Error Viper config")
 }
 
 // Execute from Cobra Firsttime
