@@ -22,4 +22,4 @@ RUN go run configs/migrate/migration.go
 ENTRYPOINT ./go-postgres
 
 # running in port
-EXPOSE 8082
+EXPOSE 8002
