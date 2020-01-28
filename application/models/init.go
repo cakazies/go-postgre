@@ -2,9 +2,30 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
+
+	"github.com/spf13/viper"
 )
+
+func init() {
+	InitViper()
+	Connect()
+}
+
+// InitViper from file toml
+func InitViper() {
+	viper.SetConfigFile("toml")
+	viper.AddConfigPath("./configs")
+	viper.SetConfigName("config")
+
+	viper.AutomaticEnv()
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Println("viper not use")
+	}
+}
 
 // LimitOffset function for get limit and offset in request API
 func LimitOffset(limit string, offset string) string {
