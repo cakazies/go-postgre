@@ -7,6 +7,7 @@ import (
 	"github.com/cakazies/go-postgre/routes"
 	"github.com/cakazies/go-postgre/utils"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var rootCmd = &cobra.Command{
@@ -40,4 +41,16 @@ func splash() {
 func Execute() {
 	err := rootCmd.Execute()
 	utils.FailError(err, "Error Execute RootCMD")
+}
+
+// InitViper from file toml
+func InitViper() {
+	viper.SetConfigFile("toml")
+	viper.AddConfigPath("./configs")
+	viper.SetConfigName("config")
+
+	viper.AutomaticEnv()
+
+	err := viper.ReadInConfig()
+	utils.FailError(err, "Error Viper config")
 }
