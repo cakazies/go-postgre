@@ -6,10 +6,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/cakazies/go-postgre/application/api"
 	"github.com/cakazies/go-postgre/routes"
+	"github.com/stretchr/testify/assert"
 )
 
 type testCase struct {
@@ -18,6 +17,7 @@ type testCase struct {
 	expectedData string
 	expectedCode int
 	path         string
+	method       string
 	handler      routes.HandlerFunc
 	query        string
 }

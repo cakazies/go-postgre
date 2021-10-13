@@ -8,12 +8,11 @@ import (
 	"testing"
 
 	"github.com/cakazies/go-postgre/application/api"
-	"github.com/gorilla/mux"
-
 	mw "github.com/cakazies/go-postgre/application/middleware"
 	conf "github.com/cakazies/go-postgre/application/models"
 	"github.com/cakazies/go-postgre/routes"
 	"github.com/cakazies/go-postgre/utils"
+	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 )
 
